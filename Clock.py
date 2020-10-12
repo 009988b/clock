@@ -27,33 +27,36 @@ class Clock(Tk):
 			x = 250 + (175 * cos(ang))
 			y = 250 - (175 * sin(ang))
 			return [x,y]
-		def sec_pos(s): 
+		def sec_pos(): 
+			s = datetime.now().second
 			if s == 0:
 				deg = 90
 			else:
 				deg = -6*s + 90
 			ang = deg*pi*2/360
 			return point(ang)
-		def min_pos(m):
+		def min_pos():
+			m = datetime.now().minute
 			if m == 0:
 				deg = 90
 			else:
 				deg = -6*m + 90
 			ang = deg*pi*2/360
 			return point(ang)
-		def hour_pos(h):
+		def hour_pos():
+			h = datetime.now().hour
 			if h >= 12:
 				deg = (h - 12)*-30 + 90
 			else:
-				deg = -30*h-90
+				deg = -30*h+90
 			ang = deg*pi*2/360
 			return point(ang)
-		s = datetime.now().second
-		m = datetime.now().minute
-		h = datetime.now().hour
-		self.w.coords("second", (250, 250, sec_pos(s)[0],sec_pos(s)[1]))
-		self.w.coords("minute", (250, 250, min_pos(m)[0], min_pos(m)[1]))
-		self.w.coords("hour", (250, 250, hour_pos(h)[0], hour_pos(h)[1]))
+		s = sec_pos()
+		m = min_pos()
+		h = hour_pos()
+		self.w.coords("second", (250, 250, s[0],s[1]))
+		self.w.coords("minute", (250, 250, m[0],m[1]))
+		self.w.coords("hour", (250, 250, h[0],h[1]))
 		self.after(1000, self.clk)
 app = Clock()
 app.mainloop()
