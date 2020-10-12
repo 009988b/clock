@@ -16,51 +16,44 @@ class Clock(Tk):
 		self.w.create_line(0,0,0,0, fill="#7f7f7f", tags="hour")
 		self.w.create_line(0,0,0,0, fill="black", tags="minute")
 		self.w.create_line(0,0,0,0, fill="red", tags="second")
-		twelve = Label(text="12")
-		twelve.place(x=self.size/2, y=50)
-		three = Label(text="3")
-		three.place(x=450, y=self.size/2)
-		six = Label(text="6")
-		six.place(x=self.size/2, y=450)
-		nine = Label(text="9")
-		nine.place(x=50, y= self.size/2)
+		labels = [Label(text="12"),Label(text="3"),Label(text="6"),Label(text="9")]
+		coords = [[self.size/2,50],[450,self.size/2],[self.size/2,450],[50,self.size/2]]
+		for l in labels:
+			idx = labels.index(l)
+			l.place(x=coords[idx][0],y=coords[idx][1])
 		self.clk()
 	def clk(self):
-		def pointX(ang):
+		def point(ang):
 			x = 250 + (175 * cos(ang))
-			return x
-		def pointY(ang):
 			y = 250 - (175 * sin(ang))
-			return y
+			return [x,y]
+		def sec_pos(s): 
+			if s == 0:
+				deg = 90
+			else:
+				deg = -6*s + 90
+			ang = deg*pi*2/360
+			return point(ang)
+		def min_pos(m):
+			if m == 0:
+				deg = 90
+			else:
+				deg = -6*m + 90
+			ang = deg*pi*2/360
+			return point(ang)
+		def hour_pos(h):
+			if h >= 12:
+				deg = (h - 12)*-30 + 90
+			else:
+				deg = -30*h-90
+			ang = deg*pi*2/360
+			return point(ang)
 		s = datetime.now().second
-		if s == 0:
-			sDegrees = 90
-		else:
-			sDegrees = -6*s + 90
-		sAng = sDegrees*pi*2/360
-		sx = pointX(sAng)
-		sy = pointY(sAng)
-		m=datetime.now().minute
-		if m == 0:
-			mDegrees = 90
-		else:
-			mDegrees = -6*m + 90
-		mAng = mDegrees*pi*2/360
-		mx = pointX(mAng)
-		my = pointY(mAng)
-		h = datetime.now().hour
-		if h >= 12:
-			hDegrees = 0
-			hDegrees = (h - 12)*-30 + 90
-		else:
-			hDegrees = -30*h
-		hAng = hDegrees*pi*2/360
-		hx = pointX(hAng)
-		hy = pointY(hAng)
-		self.w.coords("hour", (250, 250, hx, hy))
-		self.w.coords("minute", (250, 250, mx, my))
-		self.w.coords("second", (250, 250, sx, sy))
-		print(hDegrees, mDegrees, sDegrees)
+		m = datetime.now().minute
+		h = 15
+		self.w.coords("second", (250, 250, sec_pos(s)[0],sec_pos(s)[1]))
+		self.w.coords("minute", (250, 250, min_pos(m)[0], min_pos(m)[1]))
+		self.w.coords("hour", (250, 250, hour_pos(h)[0], hour_pos(h)[1]))
 		self.after(1000, self.clk)
 app = Clock()
 app.mainloop()
