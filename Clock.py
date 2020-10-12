@@ -50,7 +50,7 @@ class Clock(Tk):
 			return point(ang)
 		s = datetime.now().second
 		m = datetime.now().minute
-		h = 15
+		h = datetime.now().hour
 		self.w.coords("second", (250, 250, sec_pos(s)[0],sec_pos(s)[1]))
 		self.w.coords("minute", (250, 250, min_pos(m)[0], min_pos(m)[1]))
 		self.w.coords("hour", (250, 250, hour_pos(h)[0], hour_pos(h)[1]))
